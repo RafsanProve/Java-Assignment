@@ -16,7 +16,7 @@ import java.util.List;
 
 @Getter
 @Setter
-@ToString
+@ToString(exclude = {"assignedTasks"})
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity

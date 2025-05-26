@@ -1,4 +1,4 @@
-package com.example.java_assignment.security;
+package com.example.java_assignment.service;
 
 import com.example.java_assignment.model.AppUser;
 import com.example.java_assignment.repository.AppUserRepository;

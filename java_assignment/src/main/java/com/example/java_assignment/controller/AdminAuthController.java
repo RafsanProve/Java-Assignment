@@ -5,7 +5,7 @@ import com.example.java_assignment.dto.LoginRequest;
 import com.example.java_assignment.exception.ResourceNotFoundException;
 import com.example.java_assignment.model.Admin;
 import com.example.java_assignment.repository.AdminRepository;
-import com.example.java_assignment.security.AdminDetailsImpl;
+import com.example.java_assignment.service.AdminDetailsImpl;
 import com.example.java_assignment.security.JwtUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

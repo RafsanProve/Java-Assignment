@@ -16,7 +16,7 @@ import java.util.List;
 
 @Getter
 @Setter
-@ToString
+@ToString(exclude = {"tasks"})
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -38,10 +38,10 @@ public class AppUser implements Serializable {
 
     @NotBlank(message = "Password is required")
     @JsonIgnore
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, length = 60)
     private String password;
 
-    @CreationTimestamp
+    @CreationTimestamp()
     private LocalDateTime createdAt;
     @UpdateTimestamp
     private LocalDateTime updatedAt;

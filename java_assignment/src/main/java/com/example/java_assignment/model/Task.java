@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@ToString
+@ToString(exclude = {"assignedTo", "assignedBy"})
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity

@@ -1,4 +1,4 @@
-package com.example.java_assignment.security;
+package com.example.java_assignment.service;
 
 import com.example.java_assignment.model.AppUser;
 import lombok.AllArgsConstructor;
@@ -26,6 +26,11 @@ public class UserDetailsImpl implements UserDetails {
     @Override
     public String getUsername() {
         return user.getEmail(); // or username if login uses that
+    }
+
+    @Override
+    public String toString() {
+        return user.getEmail(); // ✅ Only return simple field, not the whole user object
     }
 
     @Override public boolean isAccountNonExpired() { return true; }
