@@ -27,15 +27,16 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-//                        .requestMatchers(
-////                                "/api/auth/**",
-//                                "/api/admin/auth/**",
-//                                "/swagger-ui/**",
-//                                "/swagger-ui.html",
-//                                "/v3/api-docs/**"
-//                        ).permitAll()
+                        .requestMatchers(
+                                "/api/auth/**",
+                                "/api/admin/auth/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui/index.html",
+                                "/swagger-ui.html",
+                                "/v3/api-docs/**"
+                        ).permitAll()
 //                        .anyRequest().authenticated()
-                        .requestMatchers("/**").permitAll()
+//                        .requestMatchers("/**").permitAll()
                 )
                 .exceptionHandling(exception -> exception
                         .authenticationEntryPoint((request, response, excep) ->

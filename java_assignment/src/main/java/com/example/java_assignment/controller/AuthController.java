@@ -55,17 +55,7 @@ public class AuthController {
     @PostMapping("/login")
     @Operation(summary = "User login")
     public ResponseEntity<JwtResponse> login(@Valid @RequestBody LoginRequest request) {
-//        Authentication authentication = authenticationManager.authenticate(
-//                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-//
-//        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        AppUser user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-
-        String jwt = jwtUtils.generateToken(new UserDetailsImpl(user), "user");
-
-        return ResponseEntity.ok(new JwtResponse(jwt, user.getEmail(), "Bearer"));
+        return userService.validateLogin(request);
     }
 
     @PostMapping("/register")
