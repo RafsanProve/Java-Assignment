@@ -33,7 +33,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         String path = request.getRequestURI();
-        System.out.println("Request path: " + path); // Add this line
+        System.out.println("Request path: " + path); // Keep this for debugging
 
 
         if (path.startsWith("/v3/api-docs")
@@ -41,6 +41,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 || path.startsWith("/swagger-resources")
                 || path.startsWith("/swagger-ui.html")
                 || path.startsWith("/swagger-ui/index.html")
+                || path.contains("swagger")
+                || path.contains("api-docs")
+                || path.startsWith("/webjars/")           // ← Add this
+                || path.startsWith("/configuration/")     // ← Add this
                 || path.startsWith("/api/auth")
                 || path.startsWith("/api/admin/auth")) {
             filterChain.doFilter(request, response);
@@ -91,5 +95,4 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         filterChain.doFilter(request, response);
     }
-
 }

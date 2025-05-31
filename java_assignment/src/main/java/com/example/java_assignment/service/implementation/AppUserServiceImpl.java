@@ -72,16 +72,26 @@ public class AppUserServiceImpl implements AppUserService {
 
     @Override
     public ResponseEntity<JwtResponse> validateLogin(LoginRequest request) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+        try {
+            System.out.println("Login attempt for email: " + request.getEmail()); // Debug
+        
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+            System.out.println("Authentication successful"); // Debug
+        
+            SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        AppUser user = appUserRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+            AppUser user = appUserRepository.findByEmail(request.getEmail())
+                    .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-        String jwt = jwtUtils.generateToken(new UserDetailsImpl(user), "user");
+            String jwt = jwtUtils.generateToken(new UserDetailsImpl(user), "user");
 
-        return ResponseEntity.ok(new JwtResponse(jwt, user.getEmail(), "Bearer"));
+            return ResponseEntity.ok(new JwtResponse(jwt, user.getEmail(), "Bearer"));
+        } catch (Exception e) {
+            System.out.println("Login failed: " + e.getMessage()); // Debug
+            e.printStackTrace();
+            throw e; // Re-throw to see the actual error
+        }
     }
 }
