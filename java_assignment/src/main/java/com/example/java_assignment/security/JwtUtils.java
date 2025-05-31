@@ -40,10 +40,10 @@ public class JwtUtils {
                 .getBody();
     }
 
-    public String generateToken(UserDetails userDetails, String type) {
+    public String generateToken(UserDetails userDetails, String role) {
         return Jwts.builder()
                 .setSubject(userDetails.getUsername())
-                .claim("type", type)
+                .claim("role", role)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
