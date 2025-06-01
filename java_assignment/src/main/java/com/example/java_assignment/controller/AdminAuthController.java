@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,6 +37,7 @@ public class AdminAuthController {
         return adminService.validateLogin(request.getEmail(), request.getPassword());
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/users")
     @Operation(summary = "List all users")
     public ResponseEntity<List<AppUser>> getAllUsers() {
@@ -44,6 +46,7 @@ public class AdminAuthController {
         return adminService.getAllUsers();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/users/{id}")
     @Operation(summary = "Delete a user by ID")
     public ResponseEntity<String> deleteUser(@PathVariable Long id) {
