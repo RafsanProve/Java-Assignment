@@ -36,11 +36,6 @@ public class AdminServiceImpl implements AdminService {
     private final JwtUtils jwtUtils;
 
     @Override
-    public ResponseEntity<Admin> loadAdminByUsername(String username) {
-        return null;
-    }
-
-    @Override
     public ResponseEntity<JwtResponse> validateLogin(String credential, String password) {
         try{
             Admin admin = adminRepository.findByEmailOrUsername(credential, credential)
@@ -64,5 +59,13 @@ public class AdminServiceImpl implements AdminService {
     public ResponseEntity<List<AppUser>> getAllUsers() {
         List<AppUser> users = userRepository.findAll();
         return ResponseEntity.ok(users);
+    }
+
+    @Override
+    public void deleteUser(Long id) {
+        AppUser appUser = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        userRepository.delete(appUser);
+        System.out.println("User deleted successfully");
     }
 }

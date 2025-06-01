@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 public interface AdminService {
-    ResponseEntity<Admin> loadAdminByUsername(String username);
     ResponseEntity<JwtResponse> validateLogin(String credential, String password);
     ResponseEntity<List<AppUser>> getAllUsers();
+    void deleteUser(Long id);
 }

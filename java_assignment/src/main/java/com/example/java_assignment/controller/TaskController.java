@@ -2,6 +2,7 @@ package com.example.java_assignment.controller;
 
 import com.example.java_assignment.dto.TaskRequestDTO;
 import com.example.java_assignment.dto.TaskResponseDTO;
+import com.example.java_assignment.exception.ResourceNotFoundException;
 import com.example.java_assignment.repository.AdminRepository;
 import com.example.java_assignment.security.AuthUtils;
 import com.example.java_assignment.security.JwtUtils;
@@ -44,6 +45,8 @@ public class TaskController {
     @Operation(summary = "Get all tasks", description = "Returns a list of all tasks assigned to users.")
     @GetMapping
     public ResponseEntity<List<TaskResponseDTO>> getAllTasks() {
+        if (!AuthUtils.isAdmin(request)) throw new AccessDeniedException("Only admins can create tasks");
+
         return ResponseEntity.ok(taskService.getAllTasks());
     }
 
@@ -59,7 +62,7 @@ public class TaskController {
         String token = request.getHeader("Authorization").substring(7);
         String email = jwtUtils.extractEmail(token);
         Long adminId = adminRepository.findByEmail(email)
-                .get()
+                .orElseThrow(() -> new ResourceNotFoundException("Admin not found"))
                 .getId();
 
         TaskResponseDTO createdTask = taskService.createTask(dto, adminId);
