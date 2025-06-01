@@ -11,5 +11,4 @@ public interface AdminService {
     ResponseEntity<Admin> loadAdminByUsername(String username);
     ResponseEntity<JwtResponse> validateLogin(String credential, String password);
     ResponseEntity<List<AppUser>> getAllUsers();
-    ResponseEntity<JwtResponse> saveAdmin(String email, String password);
 }

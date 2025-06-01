@@ -2,7 +2,9 @@ package com.example.java_assignment.controller;
 
 import com.example.java_assignment.dto.TaskRequestDTO;
 import com.example.java_assignment.dto.TaskResponseDTO;
+import com.example.java_assignment.repository.AdminRepository;
 import com.example.java_assignment.security.AuthUtils;
+import com.example.java_assignment.security.JwtUtils;
 import com.example.java_assignment.service.TaskService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -27,10 +29,17 @@ import java.util.List;
 @Tag(name = "Tasks", description = "Manage user-assigned tasks")
 public class TaskController {
 
-    private final TaskService taskService;
+    @Autowired
+    private AdminRepository adminRepository;
+
+    @Autowired
+    private TaskService taskService;
 
     @Autowired
     private HttpServletRequest request;
+
+    @Autowired
+    private JwtUtils jwtUtils;
 
     @Operation(summary = "Get all tasks", description = "Returns a list of all tasks assigned to users.")
     @GetMapping
@@ -47,7 +56,13 @@ public class TaskController {
     public ResponseEntity<TaskResponseDTO> createTask(@Valid @RequestBody TaskRequestDTO dto) {
         if (!AuthUtils.isAdmin(request)) throw new AccessDeniedException("Only admins can create tasks");
 
-        TaskResponseDTO createdTask = taskService.createTask(dto);
+        String token = request.getHeader("Authorization").substring(7);
+        String email = jwtUtils.extractEmail(token);
+        Long adminId = adminRepository.findByEmail(email)
+                .get()
+                .getId();
+
+        TaskResponseDTO createdTask = taskService.createTask(dto, adminId);
         return new ResponseEntity<>(createdTask, HttpStatus.CREATED);
     }
 
@@ -57,11 +72,22 @@ public class TaskController {
             @ApiResponse(responseCode = "404", description = "Task not found")
     })
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateTask(@PathVariable Long id, @Valid @RequestBody TaskRequestDTO dto) {
+    public ResponseEntity<String> updateTask(@PathVariable Long id, @Valid @RequestBody TaskRequestDTO dto) {
         if (!AuthUtils.isAdmin(request)) throw new AccessDeniedException("Only admins can update tasks");
 
-        taskService.updateTask(id, dto);
-        return ResponseEntity.ok().build();
+        String token = request.getHeader("Authorization").substring(7);
+        String email = jwtUtils.extractEmail(token);
+        Long adminId = adminRepository.findByEmail(email)
+                .get()
+                .getId();
+
+        if (taskService.isAdminOwner(id, adminId)) {
+            taskService.updateTask(id, dto, adminId);
+            return new ResponseEntity<>("Task updated successfully", HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<>("Admins can update only the tasks assigned by them", HttpStatus.UNAUTHORIZED);
+        }
     }
 
     @Operation(summary = "Delete a task by ID")
@@ -70,11 +96,22 @@ public class TaskController {
             @ApiResponse(responseCode = "404", description = "Task not found")
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
+    public ResponseEntity<String> deleteTask(@PathVariable Long id) {
         if (!AuthUtils.isAdmin(request)) throw new AccessDeniedException("Only admins can delete tasks");
 
-        taskService.deleteTask(id);
-        return ResponseEntity.ok().build();
+        String token = request.getHeader("Authorization").substring(7);
+        String email = jwtUtils.extractEmail(token);
+        Long adminId = adminRepository.findByEmail(email)
+                .get()
+                .getId();
+
+        if (taskService.isAdminOwner(id, adminId)) {
+            taskService.deleteTask(id);
+            return new ResponseEntity<>("Task deleted successfully", HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<>("Admins can delete only the tasks assigned by them", HttpStatus.UNAUTHORIZED);
+        }
     }
 }
 

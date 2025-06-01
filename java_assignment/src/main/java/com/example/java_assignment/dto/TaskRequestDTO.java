@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.NotNull;
 
 @Data
 @AllArgsConstructor
@@ -15,9 +16,9 @@ public class TaskRequestDTO {
 
     private String description;
 
-    @NotBlank(message = "User ID is required")
+    @NotNull(message = "User ID is required")  // ✅ Use @NotNull for Long fields
     private Long userId;
 
-    @NotBlank(message = "Admin ID is required")
-    private Long adminId;
+//    @NotNull(message = "Admin ID is required") // ✅ Use @NotNull for Long fields
+//    private Long adminId;
 }

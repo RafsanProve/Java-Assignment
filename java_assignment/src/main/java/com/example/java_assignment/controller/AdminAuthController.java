@@ -30,20 +30,9 @@ public class AdminAuthController {
         return adminService.validateLogin(request.getEmail(), request.getPassword());
     }
 
-//    @PostMapping("/auth/register")
-//    @Operation(summary = "Register a new admin")
-//    public ResponseEntity<JwtResponse> register(@Valid @RequestBody RegistrationDTO request) {
-//        return adminService.saveAdmin(request.getEmail(), request.getPassword());
-//    }
-
     @GetMapping("/users")
     @Operation(summary = "List all users")
     public ResponseEntity<List<AppUser>> getAllUsers() {
-//        List<AppUser> users = adminService.getAllUsers();
-//        if (users.isEmpty()) {
-//            return ResponseEntity.ok("No users found");
-//        }
-        
         return adminService.getAllUsers();
     }
 }

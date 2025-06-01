@@ -65,24 +65,4 @@ public class AdminServiceImpl implements AdminService {
         List<AppUser> users = userRepository.findAll();
         return ResponseEntity.ok(users);
     }
-
-    @Override
-    public ResponseEntity<JwtResponse> saveAdmin(String email, String password) {
-        try{
-            Admin admin = new Admin();
-            admin.setEmail(email);
-            admin.setPassword(passwordEncoder.encode(password));
-            admin.setCreatedAt(LocalDateTime.now());
-            admin.setUpdatedAt(LocalDateTime.now());
-
-            adminRepository.save(admin);
-            return ResponseEntity.ok(new JwtResponse("Admin registered successfully", admin.getEmail(), "Bearer"));
-        }
-        catch(Exception e){
-            e.printStackTrace();
-            throw e;
-        }
-    }
-
-
 }
