@@ -1,4 +1,4 @@
-package com.example.java_assignment.service;
+package com.example.java_assignment.service.implementation;
 
 import com.example.java_assignment.model.Admin;
 import org.springframework.security.core.GrantedAuthority;

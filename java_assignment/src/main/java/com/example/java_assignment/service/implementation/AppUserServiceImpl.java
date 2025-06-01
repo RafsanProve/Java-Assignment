@@ -8,7 +8,6 @@ import com.example.java_assignment.model.AppUser;
 import com.example.java_assignment.repository.AppUserRepository;
 import com.example.java_assignment.security.JwtUtils;
 import com.example.java_assignment.service.AppUserService;
-import com.example.java_assignment.service.UserDetailsImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

@@ -7,7 +7,6 @@ import com.example.java_assignment.model.AppUser;
 import com.example.java_assignment.repository.AdminRepository;
 import com.example.java_assignment.repository.AppUserRepository;
 import com.example.java_assignment.security.JwtUtils;
-import com.example.java_assignment.service.AdminDetailsImpl;
 import com.example.java_assignment.service.AdminService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +15,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @AllArgsConstructor

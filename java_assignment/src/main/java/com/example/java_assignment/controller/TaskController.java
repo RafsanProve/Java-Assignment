@@ -81,7 +81,7 @@ public class TaskController {
         String token = request.getHeader("Authorization").substring(7);
         String email = jwtUtils.extractEmail(token);
         Long adminId = adminRepository.findByEmail(email)
-                .get()
+                .orElseThrow(() -> new ResourceNotFoundException("Admin not found"))
                 .getId();
 
         if (taskService.isAdminOwner(id, adminId)) {
@@ -105,7 +105,7 @@ public class TaskController {
         String token = request.getHeader("Authorization").substring(7);
         String email = jwtUtils.extractEmail(token);
         Long adminId = adminRepository.findByEmail(email)
-                .get()
+                .orElseThrow(() -> new ResourceNotFoundException("Admin not found"))
                 .getId();
 
         if (taskService.isAdminOwner(id, adminId)) {

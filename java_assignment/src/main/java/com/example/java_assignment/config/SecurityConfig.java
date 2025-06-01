@@ -1,7 +1,7 @@
 package com.example.java_assignment.config;
 
 import com.example.java_assignment.security.JwtAuthenticationFilter;
-import com.example.java_assignment.service.UserDetailsServiceImpl;
+import com.example.java_assignment.service.implementation.UserDetailsServiceImpl;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
