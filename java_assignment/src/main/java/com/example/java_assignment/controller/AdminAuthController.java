@@ -2,45 +2,48 @@ package com.example.java_assignment.controller;
 
 import com.example.java_assignment.dto.JwtResponse;
 import com.example.java_assignment.dto.LoginRequest;
-import com.example.java_assignment.exception.ResourceNotFoundException;
-import com.example.java_assignment.model.Admin;
-import com.example.java_assignment.repository.AdminRepository;
-import com.example.java_assignment.service.AdminDetailsImpl;
-import com.example.java_assignment.security.JwtUtils;
+import com.example.java_assignment.dto.RegistrationDTO;
+import com.example.java_assignment.model.AppUser;
+import com.example.java_assignment.service.AdminService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
-@RequestMapping("/api/admin/auth")
+@RequestMapping("/api/admin")
 @RequiredArgsConstructor
 @Tag(name = "Admin Auth")
 public class AdminAuthController {
 
-    private final AdminRepository adminRepository;
-    private final BCryptPasswordEncoder passwordEncoder;
-    private final JwtUtils jwtUtils;
+    @Autowired
+    private AdminService adminService;
 
-    @PostMapping("/login")
+    @PostMapping("/auth/login")
     @Operation(summary = "Admin login")
     public ResponseEntity<JwtResponse> login(@Valid @RequestBody LoginRequest request) {
-        Admin admin = adminRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new ResourceNotFoundException("Admin not found"));
+        return adminService.validateLogin(request.getEmail(), request.getPassword());
+    }
 
-        if (!passwordEncoder.matches(request.getPassword(), admin.getPassword())) {
-            throw new BadCredentialsException("Invalid password");
-        }
+//    @PostMapping("/auth/register")
+//    @Operation(summary = "Register a new admin")
+//    public ResponseEntity<JwtResponse> register(@Valid @RequestBody RegistrationDTO request) {
+//        return adminService.saveAdmin(request.getEmail(), request.getPassword());
+//    }
 
-        String jwt = jwtUtils.generateToken(new AdminDetailsImpl(admin), "admin");
-
-        return ResponseEntity.ok(new JwtResponse(jwt, admin.getEmail(), "Bearer"));
+    @GetMapping("/users")
+    @Operation(summary = "List all users")
+    public ResponseEntity<List<AppUser>> getAllUsers() {
+//        List<AppUser> users = adminService.getAllUsers();
+//        if (users.isEmpty()) {
+//            return ResponseEntity.ok("No users found");
+//        }
+        
+        return adminService.getAllUsers();
     }
 }

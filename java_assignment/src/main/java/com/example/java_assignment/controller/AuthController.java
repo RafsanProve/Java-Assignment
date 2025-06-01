@@ -34,23 +34,15 @@ import java.time.LocalDateTime;
 public class AuthController {
 
     @Autowired
-    private final AuthenticationManager authenticationManager;
-
-    @Autowired
-    private final AppUserRepository userRepository;
-
-    @Autowired
-    private final JwtUtils jwtUtils;
-
-    @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
-
-    @Autowired
     private AppUserService userService;
 
 
     @PostMapping("/login")
     @Operation(summary = "User login")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "User login successful"),
+            @ApiResponse(responseCode = "400", description = "Invalid input or user do not exists")
+    })
     public ResponseEntity<JwtResponse> login(@Valid @RequestBody LoginRequest request) {
         return userService.validateLogin(request);
     }
@@ -64,12 +56,6 @@ public class AuthController {
     public ResponseEntity<String> register(@Valid @RequestBody RegistrationDTO request) {
         return userService.saveUser(request);
     }
-
-    @GetMapping("/test")
-    public ResponseEntity<String> test() {
-        return ResponseEntity.ok("Auth endpoint is working!");
-    }
-
 
 }
 

@@ -71,14 +71,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         username = claims.getSubject();
-        String userType = claims.get("type", String.class);
+        String Role = claims.get("role", String.class);
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = null;
 
-            if ("user".equalsIgnoreCase(userType)) {
+            if ("USER".equalsIgnoreCase(Role)) {
                 userDetails = userDetailsService.loadUserByUsername(username);
-            } else if ("admin".equalsIgnoreCase(userType)) {
+            } else if ("ADMIN".equalsIgnoreCase(Role)) {
                 userDetails = adminDetailsService.loadUserByUsername(username);
             }
 
@@ -89,7 +89,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
                 SecurityContextHolder.getContext().setAuthentication(authToken);
-                request.setAttribute("userType", userType);
+                request.setAttribute("userType", Role);
             }
         }
 
