@@ -28,7 +28,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/tasks")
 @RequiredArgsConstructor
-@PreAuthorize("hasRole('ADMIN')")
 @Tag(name = "Tasks", description = "Manage user-assigned tasks")
 public class TaskController {
 
